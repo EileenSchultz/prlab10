@@ -2,7 +2,7 @@ Using ChessExample;
 
 public class CheckerBoardPositionTests
 {
-    [Fact]
+    [Fact] // проверяем на обработку null
     public void ParsingNullPosition()
     {
         var good = CheckerBoardPosition.TryParse(null, null, out var result);
@@ -11,7 +11,7 @@ public class CheckerBoardPositionTests
         Assert.Null(result);
     }
     
-    [Fact] 
+    [Fact] // проверяем на валидность координат
     public void ValidsKoordinats() 
     {
      
@@ -24,7 +24,7 @@ public class CheckerBoardPositionTests
         Assert.Equal(y, result.Y); 
     }
     
-    [Fact] 
+    [Fact] //проверяем конвертацию координат в шахматную запись
     public void InvalidToString() 
     {
         var checkerBoardPosition = new CheckerBoardPosition(3, 6); 
@@ -34,7 +34,7 @@ public class CheckerBoardPositionTests
         Assert.Equal("C6", resultString); 
     }
     
-    [Fact] 
+    [Fact] //обратноя проверка как шахматная запись конвертируется в координаты
     public void ParsingPosition() 
     {
         string inputPosition = "B2"; 
@@ -45,8 +45,17 @@ public class CheckerBoardPositionTests
         Assert.Equal(2, resultPosition.Y); 
     }
     
-    
-    //добавтьб Theory на разные параметры
+    [Theory] //ну, невалидные параметры проверяем
+    [InlineData(0, 1)] 
+    [InlineData(10, 1)] 
+    [InlineData(4, 0)] 
+    [InlineData(4, 15)] 
+    [InlineData(10, 15)] 
+    [InlineData(0, 0)] 
+    public void ErrorParameter(byte x, byte y) 
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => new CheckerBoardPosition(x, y)); 
+    }
     
     
 }
